@@ -1,0 +1,18 @@
+     CLIENTE
+
+
+
+  .../gane/inicio   -------->  GameController
+                                  - Inicializa o tabuleiro
+                                  - Retorna o tabuleiro
+              
+                                        |
+                                        |
+                                        |
+   castabattle.jsp  <-------------------/
+         |      	
+         |
+         \--  .../game/fire --------> GameController
+         |           
+         |
+         \--  .../game/reset --------> GameController 

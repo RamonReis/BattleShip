@@ -1,0 +1,40 @@
+Tarefas
+=======
+
+-- Bloco 1 --
+
+1) Desenhar uma Interface Gráfica com ícones
+      1) Desenvolver tela inicial
+      2) Icones e imagens para o tabuleiro
+      3) Abordagem point-and-click ao invés de formulario
+      4) Tela de final do jogo
+
+-- Bloco 2 -- 
+
+2) Adicionar sons ao jogo (javascript)
+
+3) Contabilização de Score (tempo / numero de cliques)
+       1) Programar a finalização do jogo
+
+4) Geração aleatória do board
+
+-- Bloco 3 --
+5) Modo PLAYER vs. CPU (pré-requisito item 4)
+	1) Criação de Board pelo Usuário
+	2) Sistema de Jogadas em Turnos
+	3) Inteligência da CPU
+
+======== ESCOPO P1 =============
+Escolher um dos blocos para desenvolver e apresentar no dia 
+22/05 em sala de aula.
+=================================
+
+======== ESCOPO DO SEMESTRE =============
+6) Controle de Login/Sessão (DAO)
+======== ESCOPO DO SEMESTRE =============
+
+======== ESCOPO TRABALHOS FUTUROS =============
+7) Modo PLAYER vs. PLAYER (Pré-requisito itens 5 e 6)
+8) Boards customizados / Terrenos customizados
+9) Power-Ups e tiros especiais
+======== ESCOPO TRABALHOS FUTUROS =============
