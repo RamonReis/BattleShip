@@ -1,6 +1,11 @@
 package com.castaware.castabattle.domain;
 
+import static com.castaware.castabattle.domain.CellType.CRUISER;
+import static com.castaware.castabattle.domain.CellType.WATER;
+
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
 
 public class Board 
 {
@@ -25,7 +30,7 @@ public class Board
 		{
 			for (int j=0;j<SIZE;j++)
 			{
-				boardGame[i][j] = CellType.HIDDEN;
+				this.boardGame[i][j] = CellType.HIDDEN;
 			}
 		}
 		
@@ -50,7 +55,7 @@ public class Board
 		
 		CellType target = boardTemplate[y][x];
 		
-		// Se atingiu alguma embarcação, marca com fogo
+		// Se atingiu alguma embarcao, marca com fogo
 		if (target.isShip())
 		{
 			boardGame[y][x] = CellType.FIRE;
@@ -92,18 +97,26 @@ public class Board
 	@Override
 	public String toString()
 	{
-		String result =   "BOARD\n";
-		result = result + "=====\n";
+		String result =   "";
 		
-		for(int i=0;i<10;i++)
+		for(int i=0;i< this.boardGame.length;i++)
 		{
-			result = result + Arrays.toString(boardGame[i]) + "\n";
+			for (int j = 0; j < this.boardGame.length; j++) {
+				result += this.boardGame[i][j].toString();
+			}
+			result += "\n";
+			//result = result + Arrays.toString(boardGame[i]) + "\n";
 		}
 		
 		return result;
 	}	
 	
-	private int translateColumn(String column) 
+	/**
+	 * Must be a letter between 'A' and 'J'
+	 * @param column
+	 * @return
+	 */
+	public static int translateColumn(String column) 
 	{
 		int x;
 		
@@ -122,8 +135,36 @@ public class Board
 			throw new IllegalArgumentException("Invalid column definition: "+column);
 		return x;
 	}
+	
+	/**
+	 * Maps an Integer to a letter (String) (range between 0 and 9)
+	 * @param column
+	 * @return
+	 */
+	public static String columnInt2Str(Integer column) {
+		String x ="";
+		
+		if 		(column.equals(0)) x = "A";
+		else if (column.equals(1)) x = "B";
+		else if (column.equals(2)) x = "C";
+		else if (column.equals(3)) x = "D";
+		else if (column.equals(4)) x = "E";
+		else if (column.equals(5)) x = "F";
+		else if (column.equals(6)) x = "G";
+		else if (column.equals(7)) x = "H";
+		else if (column.equals(8)) x = "I";
+		else if (column.equals(9)) x = "J";
+		else
+			throw new IllegalArgumentException("Invalid column definition: "+column);
+		return x;
+	}
 
-	private int translateLine(int line) 
+	/**
+	 * 'line' must be a number between 1 and 10
+	 * @param line
+	 * @return
+	 */
+	public static int translateLine(int line) 
 	{
 		int y = line-1;
 		
@@ -134,7 +175,46 @@ public class Board
 		return y;
 	}
 	
+	/**
+	 * Meant to return this template board only.
+	 * @return
+	 */
+	public static CellType[][] getTemplateBoard() {
+		CellType[][] template = new CellType[][]  { 
+			{WATER, WATER,   WATER,   WATER,   WATER,   WATER, WATER, WATER, WATER, WATER},//1   
+			{WATER, WATER,   WATER,   WATER,   WATER,   WATER, WATER, WATER, WATER, WATER},//2
+			{WATER, WATER,   WATER ,   WATER,   WATER,   WATER, WATER, WATER, WATER, WATER},//3		                                      
+			{WATER, WATER,   WATER,   WATER,   WATER,   WATER, WATER, WATER, WATER, WATER},//4	
+			{WATER, WATER,   WATER,   WATER,   WATER,   WATER, WATER, WATER, WATER, WATER},//5	
+			{WATER, WATER,   WATER,   WATER,   WATER,   WATER, WATER , WATER, WATER, WATER},//6		
+			{WATER, WATER,   WATER,   WATER,   WATER,   WATER, WATER, WATER, WATER, WATER},//7	
+			{WATER, CRUISER, CRUISER, CRUISER, CRUISER, WATER, WATER, WATER, WATER, WATER},//8	
+			{WATER, WATER,   WATER,   WATER,   WATER,   WATER, WATER, WATER, WATER, WATER},//9	
+			{WATER, WATER,   WATER,   WATER,   WATER,   WATER, WATER, WATER, WATER, WATER} }//10
+		;
+			
+		return template;
+	}
 	
+	public static CellType[][] getMadeBoard(Collection<Integer[]> coordenadas) {
+		CellType[][] madeBoard = new CellType[][]  { 
+			{WATER, WATER,   WATER,   WATER,   WATER,   WATER, WATER, WATER, WATER, WATER},//1   
+			{WATER, WATER,   WATER,   WATER,   WATER,   WATER, WATER, WATER, WATER, WATER},//2
+			{WATER, WATER,   WATER ,  WATER,   WATER,   WATER, WATER, WATER, WATER, WATER},//3		                                      
+			{WATER, WATER,   WATER,   WATER,   WATER,   WATER, WATER, WATER, WATER, WATER},//4	
+			{WATER, WATER,   WATER,   WATER,   WATER,   WATER, WATER, WATER, WATER, WATER},//5	
+			{WATER, WATER,   WATER,   WATER,   WATER,   WATER, WATER ,WATER, WATER, WATER},//6		
+			{WATER, WATER,   WATER,   WATER,   WATER,   WATER, WATER, WATER, WATER, WATER},//7	
+			{WATER, WATER,   WATER,   WATER,   WATER, 	WATER, WATER, WATER, WATER, WATER},//8	
+			{WATER, WATER,   WATER,   WATER,   WATER,   WATER, WATER, WATER, WATER, WATER},//9	
+			{WATER, WATER,   WATER,   WATER,   WATER,   WATER, WATER, WATER, WATER, WATER} }//10
+		;
+		for (Iterator it = coordenadas.iterator(); it.hasNext();) {
+			Integer[] coordenada = (Integer[]) it.next();
+			madeBoard[coordenada[0]][coordenada[1]] = CellType.BOAT;
+		}
+		return madeBoard;
+	}
 }
 
 

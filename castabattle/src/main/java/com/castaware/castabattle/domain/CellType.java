@@ -8,6 +8,7 @@ public enum CellType
 	DESTROYER(true),
 	SUBMARINE(true),
 	BATTLESHIP(true),
+	
 	FIRE(false),
 	HIDDEN(false);
 	

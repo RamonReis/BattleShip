@@ -16,5 +16,8 @@
 	
 	<!--  Define quais anotações estão habilitadas -->
     <mvc:annotation-driven />
+    
+    <mvc:resources mapping="/rf.jpg" location="/rf.jpg" />
+    <mvc:resources mapping="/rf2.jpg" location="/rf2.jpg" />
 	        
 </beans>
