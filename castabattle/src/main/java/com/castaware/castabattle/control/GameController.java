@@ -1,19 +1,20 @@
 package com.castaware.castabattle.control;
 
-import java.awt.List;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.castaware.castabattle.dao.HighScoreDao;
 import com.castaware.castabattle.domain.Board;
 import com.castaware.castabattle.domain.CPUPlayer;
 import com.castaware.castabattle.domain.CellType;
@@ -25,6 +26,9 @@ public class GameController
 	private final Integer bSize = 10;
 	private Board eBoard;
 	private Board pBoard;
+	
+	@Autowired
+	private HighScoreDao hsDao;
 	
 	@RequestMapping("/start") // .../pswebproj/spring/game/start
 	public ModelAndView start(HttpServletRequest request)
@@ -83,7 +87,8 @@ public class GameController
 	
 	@RequestMapping("/fire") // .../pswebproj/spring/game/fire
 	public ModelAndView helloRequestParam
-	                           (@RequestParam int    line,
+	                           (HttpServletRequest request,
+	                        	@RequestParam int    line,
 								@RequestParam String column)
 	{
 		CellType typeE = eBoard.fire(column, line); //Player atira no board inimigo
@@ -106,6 +111,8 @@ public class GameController
 			String mensagem = "O inimigo atirou em:" + (a[1]-1) + " - " + Board.columnInt2Str(a[0]);
 			mv.addObject("mensagem",mensagem);
 			
+			//faz a contagem do numero de jogadas
+			request.getSession().setAttribute("nJogadas", ((Integer)request.getSession().getAttribute("nJogadas")+1) );
 			return mv;
 		}
 		else
@@ -123,16 +130,28 @@ public class GameController
 			
 			mv.addObject("mensagem",mensagem);
 			
+			//Salva o score (numero de jogadas)
+			HighScoreDao.saveNumJogadas((Integer)request.getSession().getAttribute("nJogadas"));
+			
+			
 			return mv;
 		}
 	}
 	
 	@RequestMapping("/createBoard")
-	public ModelAndView createBoard() {
-		
+	public ModelAndView createBoard(HttpServletRequest request) {
+		request.getSession().setAttribute("nJogadas", 0);
 		ModelAndView mv = new ModelAndView("/createBoard.jsp");
 		mv.addObject("bSize",this.bSize);
 		return mv;
+	}
+	
+	@RequestMapping("/highscores")
+	public ModelAndView highScores(HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView("/highscores.jsp");
+		List highscores = HighScoreDao.getScores();
+		mv.addObject(highscores);
+		return mv; 
 	}
 }
 
